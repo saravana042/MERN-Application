@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 
 import { validate } from '../../util/validators';
 import './Input.css'
@@ -32,7 +32,7 @@ const Input = (props) => {
     });
 
     const { id, onInput } = props;
-    const { valid, isValid } = inputState;
+    const { value, isValid } = inputState;
 
     useEffect(() => {
         onInput(id, value, isValid)
