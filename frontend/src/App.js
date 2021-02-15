@@ -9,7 +9,8 @@ import {
 import Users from './user/pages/Users';
 import NewPlace from './places/pages/NewPlace';
 import UserPlaces from './places/pages/UserPlaces';
-import UpdatePlaces from './places/pages/UpdatePlace';
+import UpdatePlace from './places/pages/UpdatePlace';
+import Auth from './user/pages/Auth';
 import MainNavigation from './shared/components/Navigation/MainNavigation';
 
 const App = () => {
@@ -28,7 +29,10 @@ const App = () => {
             <NewPlace />
           </Route>
           <Route path="/places/:placeId">
-            <UpdatePlaces />
+            <UpdatePlace />
+          </Route>
+          <Route path="/auth">
+            <Auth />
           </Route>
           <Redirect to="/" />
         </Switch>

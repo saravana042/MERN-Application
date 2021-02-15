@@ -4,13 +4,12 @@ import { useParams } from 'react-router-dom';
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import Card from '../../shared/components/UIElements/Card';
-
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
-import './NewPlace.css';
+import './PlaceForm.css';
 
 const DUMMY_PLACES = [
   {
@@ -28,7 +27,7 @@ const DUMMY_PLACES = [
   },
   {
     id: 'p2',
-    title: 'Emp.2 State Building',
+    title: 'Emp. State Building',
     description: 'One of the most famous sky scrapers in the world!',
     imageUrl:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
@@ -45,16 +44,19 @@ const UpdatePlace = () => {
   const [isLoading, setIsLoading] = useState(true);
   const placeId = useParams().placeId;
 
-  const [formState, inputHandler, setFormData] = useForm({
-    title: {
-      value: '',
-      isValid: false
+  const [formState, inputHandler, setFormData] = useForm(
+    {
+      title: {
+        value: '',
+        isValid: false
+      },
+      description: {
+        value: '',
+        isValid: false
+      }
     },
-    description: {
-      value: '',
-      isValid: false
-    }
-  }, false);
+    false
+  );
 
   const identifiedPlace = DUMMY_PLACES.find(p => p.id === placeId);
 
@@ -70,17 +72,17 @@ const UpdatePlace = () => {
             value: identifiedPlace.description,
             isValid: true
           }
-        }, true);
-
+        },
+        true
+      );
     }
     setIsLoading(false);
-
   }, [setFormData, identifiedPlace]);
 
   const placeUpdateSubmitHandler = event => {
     event.preventDefault();
     console.log(formState.inputs);
-  }
+  };
 
   if (!identifiedPlace) {
     return (
@@ -95,9 +97,9 @@ const UpdatePlace = () => {
   if (isLoading) {
     return (
       <div className="center">
-        <h2>Loading ...</h2>
+        <h2>Loading...</h2>
       </div>
-    )
+    );
   }
 
   return (
