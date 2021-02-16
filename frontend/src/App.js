@@ -27,7 +27,7 @@ const App = () => {
 
   const logout = useCallback(
     () => {
-      setIsLoggedIn(true);
+      setIsLoggedIn(false);
     },
     [],
   )
