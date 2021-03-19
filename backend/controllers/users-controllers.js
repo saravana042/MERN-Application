@@ -49,7 +49,7 @@ const signup = async (req, res, next) => {
             new HttpError('Invalid inputs passed, please check your data.', 422)
         );
     }
-    const { name, email, password, places } = req.body;
+    const { name, email, password } = req.body;
 
     // const hasUser = DUMMY_USERS.find(u => u.email === email);
     // if (hasUser) {
@@ -78,7 +78,7 @@ const signup = async (req, res, next) => {
         email,
         image: 'https://image.freepik.com/free-vector/cute-penguin-flying-with-balloons-cartoon-vector-illustration-animal-love-concept-isolated-vector-flat-cartoon-style_138676-2016.jpg',
         password,
-        places
+        places: []
     });
     console.log("createdUser:", createdUser);
     //DUMMY_USERS.push(createdUser);
