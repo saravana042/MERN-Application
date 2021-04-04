@@ -1,56 +1,56 @@
-import { useCallback, useReducer } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
-const formReducer = (state, action) => {
-    switch (action.type) {
-        case 'INPUT_CHANGE':
-            let formIsValid = true;
-            for (const inputId in state.inputs) {
-                if (inputId === action.inputId) {
-                    formIsValid = formIsValid && action.isValid;
-                } else {
-                    formIsValid = formIsValid && state.inputs[inputId].isValid;
+export const useHttpClient = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
+
+    const activeHttpRequests = useRef([]);
+
+    const sendRequest = useCallback(
+        async (url, method = 'GET', body = null, headers = {}) => {
+            setIsLoading(true);
+            const httpAbortCtrl = new AbortController();
+            activeHttpRequests.current.push(httpAbortCtrl);
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    body,
+                    headers,
+                    signal: httpAbortCtrl.signal
+                });
+
+                const responseData = await response.json();
+
+                activeHttpRequests.current = activeHttpRequests.current.filter(
+                    reqCtrl => reqCtrl !== httpAbortCtrl
+                );
+
+                if (!response.ok) {
+                    throw new Error(responseData.message);
                 }
+
+                setIsLoading(false);
+                return responseData;
+            } catch (err) {
+                setError(err.message);
+                setIsLoading(false);
+                throw err;
             }
-            return {
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [action.inputId]: { value: action.value, isValid: action.isValid }
-                },
-                isValid: formIsValid
-            };
-        case 'SET_DATA':
-            return {
-                inputs: action.inputs,
-                isValid: action.formIsValid
-            };
-        default:
-            return state;
-    }
-};
+        },
+        []
+    );
 
-export const useForm = (initialInputs, initialFormValidity) => {
-    const [formState, dispatch] = useReducer(formReducer, {
-        inputs: initialInputs,
-        isValid: initialFormValidity
-    });
+    const clearError = () => {
+        setError(null);
+    };
 
-    const inputHandler = useCallback((id, value, isValid) => {
-        dispatch({
-            type: 'INPUT_CHANGE',
-            value: value,
-            isValid: isValid,
-            inputId: id
-        });
+    useEffect(() => {
+        return () => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            activeHttpRequests.current.forEach(abortCtrl => abortCtrl.abort());
+        };
     }, []);
 
-    const setFormData = useCallback((inputData, formValidity) => {
-        dispatch({
-            type: 'SET_DATA',
-            inputs: inputData,
-            formIsValid: formValidity
-        });
-    }, []);
-
-    return [formState, inputHandler, setFormData];
+    return { isLoading, error, sendRequest, clearError };
 };
