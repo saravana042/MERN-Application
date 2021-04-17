@@ -16,7 +16,6 @@ import './PlaceForm.css';
 
 const NewPlace = () => {
   const auth = useContext(AuthContext);
-  console.log("auth", auth);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [formState, inputHandler] = useForm(
     {
@@ -46,7 +45,10 @@ const NewPlace = () => {
         address: formState.inputs.address.value,
         creator: auth.userId
       }),
-        { 'Content-Type': 'application/json' }
+        {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + auth.token
+        }
       );
       history.push('/');
     } catch (err) {
