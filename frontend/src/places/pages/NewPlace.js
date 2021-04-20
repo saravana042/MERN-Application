@@ -39,7 +39,7 @@ const NewPlace = () => {
   const placeSubmitHandler = async event => {
     event.preventDefault();
     try {
-      await sendRequest('http://localhost:5000/api/places', 'POST', JSON.stringify({
+      await sendRequest(process.env.REACT_APP_BACKEND_URL + '/places', 'POST', JSON.stringify({
         title: formState.inputs.title.value,
         description: formState.inputs.description.value,
         address: formState.inputs.address.value
