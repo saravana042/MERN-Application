@@ -71,7 +71,7 @@ const createPlace = async (req, res, next) => {
         return next(new HttpError('Invalid inputs passed, please check your data.', 422));
     }
 
-    const { title, description, address, creator } = req.body;
+    const { title, description, address } = req.body;
     // const title = req.body.title;
 
     let coordinates;
@@ -87,7 +87,7 @@ const createPlace = async (req, res, next) => {
         address,
         location: coordinates,
         image: 'https://image.freepik.com/free-vector/cute-penguin-flying-with-balloons-cartoon-vector-illustration-animal-love-concept-isolated-vector-flat-cartoon-style_138676-2016.jpg',
-        creator
+        creator: req.userData.userId
     });
 
     // DUMMY_PLACES.push(createdPlace);  //unshift(createdPlace)
@@ -95,7 +95,7 @@ const createPlace = async (req, res, next) => {
     let user;
 
     try {
-        user = await User.findById(creator);
+        user = await User.findById(req.userData.userId);
     } catch (err) {
         const error = new HttpError(
             'Creating place failed, please try again', 500
