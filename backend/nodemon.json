@@ -3,7 +3,7 @@
         "DB_USER": "karthick" ,
         "DB_PASSWORD": "karthickPWD" ,
         "DB_NAME": "mern",
-        "GOOGLE_API_KEY": "AIzaSyA0e37egDH4smcvqcNrCFP23wIIcu76_Xk",
+        "GOOGLE_API_KEY": "AIzaSyC3AlKfxBVj3yM3-pFBTzdu92ZQhSHa03A",
         "JWT_KEY": "supersecret_dont_share"
     }
 }
